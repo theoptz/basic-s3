@@ -1,0 +1,58 @@
+linters:
+  disable-all: true
+  enable:
+    - errcheck
+    - gosimple
+    - goimports
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+    - gofmt
+    - exportloopref
+    - gocyclo
+    - funlen
+    - nakedret
+    - dupl
+
+run:
+  timeout: 2m
+
+issues:
+  exclude-dirs:
+    - gen/
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - funlen
+
+linters-settings:
+  funlen:
+    # Checks the number of lines in a function.
+    # If lower than 0, disable the check.
+    # Default: 60
+    lines: 150
+
+    # Checks the number of statements in a function.
+    # If lower than 0, disable the check.
+    # Default: 40
+    statements: 70
+
+  nakedret:
+    # Make an issue if func has more lines of code than this setting, and it has naked returns.
+    # Default: 30
+    max-func-lines: 10
+
+  gosimple:
+    # Select the Go version to target.
+    # Default: 1.13
+    # Deprecated: use the global `run.go` instead.
+    go: "1.19"
+    # Sxxxx checks in https://staticcheck.io/docs/configuration/options/#checks
+    # Default: ["*"]
+    checks: ["all"]
+
+  dupl:
+    # Tokens count to trigger issue.
+    # Default: 150
+    threshold: 220

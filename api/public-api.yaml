@@ -1,0 +1,71 @@
+openapi: 3.0.3
+info:
+  title: File Storage API
+  description: API для загрузки и скачивания файлов
+  version: "0.0.1"
+paths:
+  /{bucket}/{key}:
+    put:
+      summary: Загрузка файла
+      description: Загружает файл в указанный `bucket` с заданным `key`.
+      parameters:
+        - name: bucket
+          in: path
+          description: Название бакета для хранения файла
+          required: true
+          schema:
+            type: string
+        - name: key
+          in: path
+          description: Уникальный ключ (имя файла)
+          required: true
+          schema:
+            type: string
+        - name: Content-Type
+          in: header
+          description: Тип загружаемого файла (например, `image/png`)
+          schema:
+            type: string
+      requestBody:
+        description: Содержимое файла
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        "200":
+          description: Файл успешно загружен
+        "400":
+          description: Ошибка в запросе
+        "500":
+          description: Внутренняя ошибка сервера
+    get:
+      summary: Скачивание файла
+      description: Загружает файл из указанного `bucket` по заданному `key`.
+      parameters:
+        - name: bucket
+          in: path
+          description: Название бакета для хранения файла
+          required: true
+          schema:
+            type: string
+        - name: key
+          in: path
+          description: Уникальный ключ (имя файла)
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Файл успешно скачан
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        "404":
+          description: Файл не найден
+        "500":
+          description: Внутренняя ошибка сервера

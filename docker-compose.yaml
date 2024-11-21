@@ -1,0 +1,82 @@
+version: '3.8'
+
+x-shared-config: &shared-config
+  build:
+    dockerfile: devops/Dockerfile
+    context: .
+  entrypoint: [ "/storage" ]
+  environment:
+    HOST: "0.0.0.0"
+    PORT: 5555
+    DIRECTORY: "/files"
+
+services:
+  rest:
+    container_name: rest
+    build:
+      dockerfile: devops/Dockerfile
+      context: .
+    entrypoint: [ "/rest" ]
+    environment:
+      HOST: "0.0.0.0"
+      PORT: 8080
+      META_FILE: /files/meta.json
+      STORAGES: "storage-01:5555,storage-02:5555,storage-03:5555,storage-04:5555,storage-05:5555,storage-06:5555"
+      WEIGHTS: "1,1,1,1,1,1"
+      MAX_CONNECTIONS: 1000
+      MAX_BODY_SIZE: 1073741824
+      CHUNK_SIZE: 8192
+      MIN_PART_SIZE: 8192
+      MAX_PARTS: 6
+    volumes:
+      - ./files/meta:/files
+    ports:
+      - "8080:8080"
+
+  storage-01:
+    container_name: storage-01
+    <<: *shared-config
+    volumes:
+      - ./files/storage-01:/files
+    ports:
+      - "5555:5555"
+
+  storage-02:
+    container_name: storage-02
+    <<: *shared-config
+    volumes:
+      - ./files/storage-02:/files
+    ports:
+      - "5556:5555"
+
+  storage-03:
+    container_name: storage-03
+    <<: *shared-config
+    volumes:
+      - ./files/storage-03:/files
+    ports:
+      - "5557:5555"
+
+  storage-04:
+    container_name: storage-04
+    <<: *shared-config
+    volumes:
+      - ./files/storage-04:/files
+    ports:
+      - "5558:5555"
+
+  storage-05:
+    container_name: storage-05
+    <<: *shared-config
+    volumes:
+      - ./files/storage-05:/files
+    ports:
+      - "5559:5555"
+
+  storage-06:
+    container_name: storage-06
+    <<: *shared-config
+    volumes:
+      - ./files/storage-06:/files
+    ports:
+      - "5560:5555"

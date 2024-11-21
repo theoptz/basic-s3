@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option go_package = "github.com/theoptz/basic-s3/proto";
+
+service Storage {
+  rpc Upload(stream UploadRequest) returns(UploadResponse);
+  rpc Download(DownloadRequest) returns(stream DownloadResponse);
+}
+
+message UploadRequest {
+  string bucket = 1;
+  string key = 2;
+  int32 version = 3;
+  int32 part = 4;
+  int32 size = 5;
+  bytes chunk = 6;
+}
+
+message UploadResponse {}
+
+message DownloadRequest {
+  string bucket = 1;
+  string key = 2;
+  int32 version = 3;
+  int32 part = 4;
+}
+
+message DownloadResponse {
+  bytes chunk = 1;
+}
